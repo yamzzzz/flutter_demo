@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 import 'ui_widget/WidgetDemo.dart';
 
@@ -46,7 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _WidgetState extends State<MyHomePage> {
-  var genderSelectionGroup = "genderSelectionGroup";
+  var genderSelectionGroup;
   var maleValue = 0;
   var femaleValue = 0;
   bool readingValue = false;
@@ -84,14 +86,14 @@ class _WidgetState extends State<MyHomePage> {
           Row(
             children: <Widget>[
               Radio(
-                  value: maleValue,
+                  value: 0,
                   groupValue: genderSelectionGroup,
                   onChanged: (value) {
                     genderSelected("M", value);
                   }),
               Text("Male"),
               Radio(
-                  value: femaleValue,
+                  value: 1,
                   groupValue: genderSelectionGroup,
                   onChanged: (value) {
                     genderSelected("F", value);
@@ -132,18 +134,16 @@ class _WidgetState extends State<MyHomePage> {
                   });
                 })
           ]),
+          RaisedButton(onPressed: submitClicked(),
+          child: Text("SUBMIT"),
+          color: Colors.red,
+          textColor: Colors.white,)
         ]));
   }
 
   genderSelected(selectedGender, value) {
     setState(() {
-      if (selectedGender == "M") {
-        maleValue = value;
-        femaleValue = value==0?1:0;
-      } else {
-        femaleValue = value;
-        maleValue = value==0?1:0;
-      }
+      genderSelectionGroup = value;
     });
   }
 
@@ -162,4 +162,8 @@ class _WidgetState extends State<MyHomePage> {
       }
     });
   }
+}
+
+submitClicked() {
+  Fluttertoast.showToast(msg: "Submit Clicked!!",toastLength: Toast.LENGTH_SHORT);
 }

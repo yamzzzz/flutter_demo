@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/list/CardList.dart';
+import 'package:flutter_demo/list/SeparatedList.dart';
+import 'package:flutter_demo/list/WidgetList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
+import 'list/BuilderList.dart';
 import 'ui_widget/WidgetDemo.dart';
 
 void main() => runApp(MyApp());
@@ -10,160 +14,81 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return new MaterialApp(
+        initialRoute: '/',
+      routes: {
+          '/' : (context) => MyHomePage(),
+         '/list_separated' : (context) => SeparatedList(),
+        '/list_widget' : (context) => WidgetList(),
+        '/list_builder' : (context) => BuilderList(),
+        '/list_card' : (context) => CardList()
+      },
     );
   }
+
 }
+
+
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
-  _WidgetState createState() => _WidgetState();
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _HomeState();
+  }
+
+
+
 }
 
-class _WidgetState extends State<MyHomePage> {
-  var genderSelectionGroup;
-  var maleValue = 0;
-  var femaleValue = 0;
-  bool readingValue = false;
-  bool singingValue = false;
-  bool dancingValue = false;
-
-  var notificationValue = false;
-
+class _HomeState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
-          title: Text("WidgetDemo"),
+          title: Text('Flutter Demo'),
         ),
-        body: Column(children: <Widget>[
-          TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Enter Name')),
-          TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter DOB',
-                  suffixIcon: IconButton(icon: Icon(Icons.calendar_today)))),
-          TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter DOT',
-                  suffixIcon: IconButton(icon: Icon(Icons.calendar_today)))),
-          Text("GENDER"),
-          Row(
-            children: <Widget>[
-              Radio(
-                  value: 0,
-                  groupValue: genderSelectionGroup,
-                  onChanged: (value) {
-                    genderSelected("M", value);
-                  }),
-              Text("Male"),
-              Radio(
-                  value: 1,
-                  groupValue: genderSelectionGroup,
-                  onChanged: (value) {
-                    genderSelected("F", value);
-                  }),
-              Text("Female")
-            ],
-          ),
-          Text("HOBBIES"),
-          Row(
-            children: <Widget>[
-              Checkbox(
-                  value: readingValue,
-                  onChanged: (value) {
-                    hobbySelected("reading", value);
-                  }),
-              Text("Reading"),
-              Checkbox(
-                  value: singingValue,
-                  onChanged: (value) {
-                    hobbySelected("singing", value);
-                  }),
-              Text("Singing"),
-              Checkbox(
-                  value: dancingValue,
-                  onChanged: (value) {
-                    hobbySelected("dancing", value);
-                  }),
-              Text("Dancing"),
-            ],
-          ),
-          Row(children: <Widget>[
-            Text("NOTIFICATIONS"),
-            Switch(
-                value: notificationValue,
-                onChanged: (value) {
-                  setState(() {
-                    notificationValue = value;
-                  });
-                })
-          ]),
-          RaisedButton(onPressed: submitClicked(),
-          child: Text("SUBMIT"),
+        body: Container(child: RaisedButton(
+          child: Text("Lists"),
           color: Colors.red,
-          textColor: Colors.white,)
-        ]));
+            textColor: Colors.white,
+            onPressed: () {
+          navigateTo(context, "list_card");
+        }))
+    );
   }
 
-  genderSelected(selectedGender, value) {
-    setState(() {
-      genderSelectionGroup = value;
-    });
-  }
+  navigateTo(BuildContext context, String page) {
+    switch (page) {
+      case "list_separated":
+        {
+          Navigator.pushNamed(context, '/list_separated');
+        }
+        break;
 
-  void hobbySelected(s, value) {
-    setState(() {
-      switch (s) {
-        case "reading":
-          readingValue = value;
-          break;
-        case "singing":
-          singingValue = value;
-          break;
-        case "dancing":
-          dancingValue = value;
-          break;
-      }
-    });
+      case "list_widget":
+        {
+          Navigator.pushNamed(context, '/list_widget');
+        }
+        break;
+
+      case "list_builder":
+        {
+          Navigator.pushNamed(context, '/list_builder');
+        }
+        break;
+
+      case "list_card":
+        {
+          Navigator.pushNamed(context, '/list_card');
+        }
+        break;
+    }
   }
 }
 
-submitClicked() {
-  Fluttertoast.showToast(msg: "Submit Clicked!!",toastLength: Toast.LENGTH_SHORT);
-}
